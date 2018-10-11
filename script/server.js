@@ -17,13 +17,13 @@ app.use(function (err, req, res, next) {
 });
 
 //读取静态资源
-console.log(path.resolve(__dirname, '../'));
+console.log(path.resolve(__dirname, '../dist'));
 app.use(compression());
-app.use('dist', express.static(path.resolve(__dirname, '../') + '/dist'));
-app.use(express.static(path.resolve(__dirname, '../')));
+app.use('static', express.static(path.resolve(__dirname, '../') + '/dist/static'));
+app.use(express.static(path.resolve(__dirname, '../dist')));
 
 app.use('/live', proxy({
-    target: 'https://bggray-mobile.like.video/',
+    target: '',
     changeOrigin: true
 }));
 

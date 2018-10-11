@@ -11,8 +11,7 @@ const projectPath = path.resolve(__dirname, '../src');
 
 module.exports = {
     entry: {
-        vendor: ['babel-polyfill', 'vue', 'axios'],
-        main: [path.resolve(__dirname, '../src/entry/index.js')]
+        main: ['babel-polyfill', path.resolve(__dirname, '../src/entry/index.js')]
     },
     module: {
         rules: [
@@ -141,7 +140,13 @@ module.exports = {
             new UglifyJsPlugin({
                 cache: true,
                 parallel: true,
-                sourceMap: true
+                sourceMap: false,
+                uglifyOptions: {
+                    compress: {
+                        drop_debugger: true,
+                        drop_console: true
+                    }
+                }
             }),
             new OptimizeCSSAssetsPlugin({
                 cssProcessor: require('cssnano'),
@@ -150,12 +155,12 @@ module.exports = {
             })
         ],
         splitChunks: {
-            chunks: 'async',
+            chunks: 'initial',
             minSize: 30000, // 形成一个新代码块最小的体积
             minChunks: 1, // 最小应该被引用的次数
             maxAsyncRequests: 5, // 按需加载时候最大的并行请求数
             maxInitialRequests: 3, // 一个入口最大的并行请求数
-            automaticNameDelimiter: '~',
+            automaticNameDelimiter: '-',
             name: true
         }
     },
@@ -170,7 +175,10 @@ module.exports = {
             '@router': path.resolve(projectPath, 'router'), // 项目页面
             '@mixins': path.resolve(projectPath, 'mixins'), // 项目混合器
             '@util': path.resolve(projectPath, 'util'), // 项目工具包
-            '@assets': path.resolve(projectPath, 'assets') // 项目资源文件
+            '@assets': path.resolve(projectPath, 'assets'), // 项目资源文件
+            '@lang': path.resolve(projectPath, 'lang'), // 语言文件
+            '@constant': path.resolve(projectPath, 'constant'), // 项目常量
+            '@config': path.resolve(projectPath, 'config') // 配置文件
         }
     }
 };

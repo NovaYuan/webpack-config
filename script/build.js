@@ -3,6 +3,8 @@
  */
 const path = require('path');
 const baseConfig = require('./base');
+const fs = require('fs');
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -19,6 +21,13 @@ const buildConfig = merge(baseConfig, {
     plugins: [
         new CleanWebpackPlugin('../dist', {
             allowExternal: true
+        }),
+        new webpack.DefinePlugin({
+            ENV_PRODUCTION: JSON.stringify(true),
+            ENV_APP_VERSION: (() => {
+                const data = fs.readFileSync(path.resolve(__dirname, '../src/manifest.webapp'), 'utf-8');
+                return JSON.stringify(JSON.parse(data).version)
+            })()
         }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, '../src/index.html'),
